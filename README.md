@@ -9,8 +9,8 @@ The GCs project simply creates the following resources in the project : **theowa
 
 ## Resource roles and responsibilities
 * **hyrule** is the responsibile for hosting the infrastruture as part of the project: **theowaf-class7-5-kevinwillocks**
-* **favorite-food** creates a text file that specifies a favorite Panamaian dish
-* The variable named "project" passes **theowaf-class7-5-kevinwillocks** to the provider, making neccesary updates easier.  Please refer to the following:
+* The variable named "project" passes **theowaf-class7-5-kevinwillocks** declared as **default** to the provider's **project** argument, making neccesary updates easier.  
+**Please refer to the following:**
 ```
 variable "project" {
     description = "The GCP project your infrastructure will be deployed in"
@@ -23,6 +23,19 @@ provider "google" {
   region  = "us-central1"
 }
 ```
+
+* **favorite-food** creates a text file that specifies a favorite Panamaian dish.
+Please refer to the following:
+
+```
+resource "local_file" "favorite-food" {
+  content  = "lentils, rice and chicken!  Very Panamanian"
+  filename = "${path.module}/favoritefood.txt"
+}
+```
+* The **content** argument is responsible for displaying the content of the created file.
+* **Filename** takes a path in our project and creates it.  You decide the name and the type of file it will be.
+
 
 | Resource      | Source         |
 | ------------- |:-------------:|

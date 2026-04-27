@@ -1,4 +1,5 @@
-# THIS DOES NOT WORK. I ALREADY HAVE THE BUCKET resource "google_storage_bucket" "hyrule-static-site" {
+# THIS DOES NOT WORK. I ALREADY HAVE THE BUCKET 
+#resource "google_storage_bucket" "hyrule-static-site" {
 #   name          = "hyrule-storage"
 #   location      = "US"
 #   force_destroy = true

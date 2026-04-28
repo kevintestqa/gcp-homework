@@ -34,7 +34,7 @@ resource "local_file" "favorite-food" {
 }
 ```
 * The **content** argument is responsible for displaying the content of the created file.
-* **Filename** takes a path in our project and creates it.  You decide the name and the type of file it will be.
+* **Filename** takes a path in our project, and creates a file in that path.  You decide the name and the type of file (extension) it will be.
 
 
 | Resource      | Source         |

@@ -1,4 +1,4 @@
-# GCS project guide
+# Week 7 GCS project guide
 
 The GCs project simply creates the following resources in the project : **theowaf-class7-5-kevinwillocks**
 ## Resources

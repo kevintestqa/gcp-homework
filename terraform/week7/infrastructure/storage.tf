@@ -14,24 +14,24 @@ resource "google_storage_bucket" "hyrule-static-site" {
 
 //Uploads 404.html, index.html and style.css files to the desired bucket
 resource "google_storage_bucket_object" "hyrule-error-html" {
-  name   = "error"
-  source = "${path.module}/404.html"
+  name   = "error.html"
+  source = "${path.module}/static-site-asset/404.html"
   bucket = var.neo-bucket
 
   depends_on = [ google_storage_bucket.hyrule-static-site ]
 }
 
 resource "google_storage_bucket_object" "hyrule-index-html" {
-  name   = "index"
-  source = "${path.module}/index.html"
+  name   = "index.html"
+  source = "${path.module}/static-site-asset/index.html"
   bucket = var.neo-bucket
 
    depends_on = [ google_storage_bucket.hyrule-static-site ]
 }
 
 resource "google_storage_bucket_object" "hyrule-css" {
-  name   = "style"
-  source = "${path.module}/style.css"
+  name   = "style.css"
+  source = "${path.module}/static-site-asset/style.css"
   bucket = var.neo-bucket
 
    depends_on = [ google_storage_bucket.hyrule-static-site ]
@@ -39,7 +39,7 @@ resource "google_storage_bucket_object" "hyrule-css" {
 
 resource "google_storage_bucket_object" "hyrule-porshe" {
   name   = "porshe.jpeg" //images apprently need the extenstion 
-  source = "${path.module}/porshe.jpeg"
+  source = "${path.module}/static-site-asset/porshe.jpeg"
   bucket = var.neo-bucket
   content_type = "image/jpeg"
 

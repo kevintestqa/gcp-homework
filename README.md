@@ -6,6 +6,8 @@ The GCs project simply creates the following resources in the project : **theowa
 * A local file named **favorite-food**
 * A variable named project
 * A GCP bucket containing assets for a static site
+
+
 | Resource      | Source         |
 | ------------- |:-------------:|
 | Error state  | https://storage.googleapis.com/neo-hyrule-storage/error.html   |

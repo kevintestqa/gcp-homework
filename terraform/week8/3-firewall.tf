@@ -1,0 +1,35 @@
+resource "google_compute_firewall" "allow_ssh" {
+  name    = "allow-ssh"
+  network = google_compute_network.satellite-2x.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"] # Lab only
+
+  depends_on = [
+    google_compute_network.satellite-2x
+  ]
+
+  target_tags = ["ingress-ssh"]
+}
+
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
+  network = google_compute_network.satellite-2x.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+
+  depends_on = [
+    google_compute_network.satellite-2x
+  ]
+
+  target_tags = ["ingress-http"]
+}

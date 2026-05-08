@@ -73,54 +73,21 @@
 * When creating a VM in terraform, the following arguments are required:
   * boot_disk - the OS and storage information for our VM
   * machine_type - the series of machine we wish to provision.  Depending on requirements, one Series may be needed over another
-* 
 
-### Unordered
+## Sources
 
-* Item 1
-* Item 2
-* Item 2a
-* Item 2b
-    * Item 3a
-    * Item 3b
+* The below sources were used to build this README and the project it is associated with.  All HA, Autoscaling and Health Check sources were used to gather definitions and use cases.  Terraform sources were used to build the attached project.
 
-### Ordered
-
-1. Item 1
-2. Item 2
-3. Item 3
-    1. Item 3a
-    2. Item 3b
-
-## Images
-
-![This is an alt text.](/image/Markdown-mark.svg "This is a sample image.")
-
-## Links
-
-You may be using [Markdown Live Preview](https://markdownlivepreview.com/).
-
-## Blockquotes
-
-> Markdown is a lightweight markup language with plain-text-formatting syntax, created in 2004 by John Gruber with Aaron Swartz.
->
->> Markdown is often used to format readme files, for writing messages in online discussion forums, and to create rich text using a plain text editor.
-
-## Tables
-
-| Left columns  | Right columns |
+| Topic  | Link |
 | ------------- |:-------------:|
-| left foo      | right foo     |
-| left bar      | right bar     |
-| left baz      | right baz     |
-
-## Blocks of code
-
-```
-let message = 'Hello world';
-alert(message);
-```
-
-## Inline code
-
-This web site is using `markedjs/marked`.
+| HA vs Fault Tolerance      | https://www.couchbase.com/blog/high-availability-vs-fault-tolerance|
+| HA vs Fault Tolerance IBM    | https://www.ibm.com/docs/en/powerha-aix/7.2.x?topic=aix-high-availability-versus-fault-tolerance     |
+| HA vs Fault Tolerance Scale computing     | https://www.scalecomputing.com/resources/fault-tolerance-vs-high-availability   |
+|nOps | https://www.nops.io/blog/cloud-scalability|
+|Auto scaling vs elasticity | https://tenmilesquare.com/capabilities/scalability-architecture/auto-scaling-and-elasticity|
+| Instance groups | https://docs.cloud.google.com/compute/docs/instance-groups|
+| 3 Tier architecture| https://www.ibm.com/think/topics/three-tier-architecture|
+|Health Check Overview| https://docs.cloud.google.com/load-balancing/docs/health-check-concepts?utm_source=chatgpt.com|
+|  Terraform Registry Google_compute instance| https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#network_interface.0.access_config.0.nat_ip-1|
+|Terraform Registry google_compute_region_instance_group_manager|https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_instance_group_manager|
+|Terraform Registry google_compute_instance_template| https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_template|

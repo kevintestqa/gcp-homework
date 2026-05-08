@@ -1,19 +1,18 @@
-resource "google_compute_instance" "satellite-2x-vm01" {
-  name         = "satellite-2x-vm01"
-  machine_type = "n4-standard-2"
-  zone         = "us-west1-a"
+// The google_compute_instance_template is the resource needed to create an instance template in GCP.  Teams will be able to create Managed Instance groups using this template.  Visit https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_template for more information
+resource "google_compute_instance_template" "satellite-2x-vm-template" {
+    name = "satellite-2x-vm-template"
 
-  boot_disk {
-    initialize_params {
-      image = "centos-cloud/centos-stream-10"
-      size  = 100
-    }
+// Specfiying the type of VM instance the template will create
+  machine_type = google_compute_instance.satellite-2x-vm01.machine_type
+  disk {
+    source_image = "centos-cloud/centos-stream-10"
+    auto_delete = true
   }
 
+// Assign the destination for VMs created by the template
   network_interface {
+    network    = google_compute_network.satellite-2x.id
     subnetwork = google_compute_subnetwork.satellite-sub.id
-
-    access_config {}
   }
 
   metadata_startup_script = <<-EOT
@@ -48,6 +47,4 @@ EOF
 # turn on apache2 service and make it turn on after the VM reboots too
 systemctl enable --now httpd
 EOT
-
-  tags = []
 }

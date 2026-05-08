@@ -12,6 +12,8 @@ resource "google_compute_firewall" "allow_ssh" {
   depends_on = [
     google_compute_network.satellite-2x
   ]
+
+  target_tags = ["ingress-ssh"]
 }
 
 resource "google_compute_firewall" "allow_http" {
@@ -28,4 +30,6 @@ resource "google_compute_firewall" "allow_http" {
   depends_on = [
     google_compute_network.satellite-2x
   ]
+
+  target_tags = ["ingress-http"]
 }

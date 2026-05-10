@@ -1,5 +1,5 @@
-resource "google_compute_firewall" "satellite_allow_http" {
-  name    = "satellite_allow_http"
+resource "google_compute_firewall" "satellite-allow-http" {
+  name    = "satellite-allow-http"
   network = google_compute_network.satellite-vpc.name
 
   allow {

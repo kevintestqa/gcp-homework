@@ -2,7 +2,7 @@
 //Use resource google_compute_backend_service for the backend. https://www.reddit.com/r/Terraform/comments/oe06w1/gcp_load_balancer_backend_service/ and https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_url_map#argument-reference
 
 resource "google_compute_url_map" "satellite_urlmap" {
-  name        = "satellite_urlmap"
+  name        = "satellite-ur-lmap"
   description = "Resource to route reuests to specified backend services"
 
   default_service = google_compute_backend_bucket.satellite_image_backend.id
@@ -47,13 +47,17 @@ resource "google_compute_url_map" "satellite_urlmap" {
 }
 
 resource "google_compute_backend_service" "satellite-thailand-fantasy" {
-  name        = "thailand"
-  port_name   = "http"
-  protocol    = "HTTP"
-  timeout_sec = 60
-  load_balancing_scheme = "EXTERNALMANAGED"
+  name                  = "thailand"
+  port_name             = "http"
+  protocol              = "HTTP"
+  timeout_sec           = 60
+  load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellite-hc.id]
+
+  backend {
+    group = google_compute_region_instance_group_manager.satellite-thailand-mig.instance_group
+  }
 
   lifecycle {
     create_before_destroy = true
@@ -61,13 +65,18 @@ resource "google_compute_backend_service" "satellite-thailand-fantasy" {
 }
 
 resource "google_compute_backend_service" "satellite-colombia-fantasy" {
-  name        = "colombia"
-  port_name   = "http"
-  protocol    = "HTTP"
-  timeout_sec = 60
-  load_balancing_scheme = "EXTERNALMANAGED"
+  name                  = "colombia"
+  port_name             = "http"
+  protocol              = "HTTP"
+  timeout_sec           = 60
+  load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellite-hc.id]
+
+  //TODO: Find out more. The backend needs to be attached https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_backend_service?utm_source=chatgpt.com#nested_backend
+  backend {
+    group = google_compute_region_instance_group_manager.satellite-colombia-mig.instance_group
+  }
 
   lifecycle {
     create_before_destroy = true

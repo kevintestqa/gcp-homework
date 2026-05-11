@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "satellite-bucket" {
-  name          = "satellite-bucket"
+  name          = "satellite-bucket-willocks"
   location      = "US"
   force_destroy = true
 

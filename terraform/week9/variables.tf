@@ -5,7 +5,7 @@ variable "project" {
 
 variable "machine_type" {
   description = "The default machine type for our instance group"
-  default     = "n4-standard-2"
+  default     = "e2-medium"
 }
 
 variable "allow-ingress-http" {

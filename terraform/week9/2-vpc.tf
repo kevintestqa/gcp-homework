@@ -14,12 +14,12 @@ resource "google_compute_network" "satellite-vpc" {
 
 #   secondary_ip_range {
 #     range_name    = "satellite-sub-alpha-range"
-#     ip_cidr_range = "10.58.0.0/14"
+#     ip_cidr_range = "10.50.0.0/14"
 #   }
 
 #   secondary_ip_range {
 #     range_name    = "satellite-sub-beta-range"
-#     ip_cidr_range = "10.62.0.0/20"
+#     ip_cidr_range = "10.60.0.0/20"
 #   }
 
 #   depends_on = [

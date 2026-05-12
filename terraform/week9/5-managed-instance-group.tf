@@ -10,13 +10,13 @@ resource "google_compute_region_instance_group_manager" "satellite-colombia-mig"
   }
 
   named_port {
-    name = "colombia"
+    name = "http"
     port = 80
   }
 
   auto_healing_policies {
     health_check      = google_compute_http_health_check.satellite-hc.id
-    initial_delay_sec = 120
+    initial_delay_sec = 500
   }
 }
 
@@ -31,12 +31,12 @@ resource "google_compute_region_instance_group_manager" "satellite-thailand-mig"
     instance_template = google_compute_instance_template.satellite-vm-thailand-template.self_link
   }
   named_port {
-    name = "thailand"
+    name = "http"
     port = 80
   }
 
   auto_healing_policies {
     health_check      = google_compute_http_health_check.satellite-hc.id
-    initial_delay_sec = 120
+    initial_delay_sec = 500
   }
 }

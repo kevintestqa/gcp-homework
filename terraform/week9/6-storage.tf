@@ -33,7 +33,7 @@ resource "google_storage_bucket_iam_member" "satellite-bucket-access" {
 }
 
 resource "google_compute_backend_bucket" "satellite_image_backend" {
-  name        = "fantasy-images"
+  name        = "fantasy-women"
   description = "Contains beautiful women"
   bucket_name = google_storage_bucket.satellite-bucket.name
   enable_cdn  = true

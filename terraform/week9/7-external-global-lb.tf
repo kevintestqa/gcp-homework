@@ -7,40 +7,35 @@ resource "google_compute_url_map" "satellite_urlmap" {
 
   default_service = google_compute_backend_bucket.satellite_image_backend.id
 
-  # host_rule {
-  #   hosts        = ["mysite.com"]
-  #   path_matcher = "mysite"
-  # }
-
-  # host_rule {
-  #   hosts        = ["myothersite.com"]
-  #   path_matcher = "otherpaths"
-  # }
+  host_rule {
+    hosts        = ["*"]
+    path_matcher = "mysite"
+  }
 
   path_matcher {
     name            = "mysite"
     default_service = google_compute_backend_bucket.satellite_image_backend.id
 
     path_rule {
-      paths   = ["/colombia"]
+      paths   = ["/colombia", "/colombia/*"]
       service = google_compute_backend_service.satellite-colombia-fantasy.id
     }
 
     path_rule {
-      paths   = ["/thailand"]
+      paths   = ["/thailand", "/thailand/*"]
       service = google_compute_backend_service.satellite-thailand-fantasy.id
     }
   }
 
   //TODO: TRY TO EDIT THIS
   test {
-    service = google_compute_backend_bucket.satellite_image_backend.id
+    service = google_compute_backend_service.satellite-colombia-fantasy.id
     host    = "example.com"
     path    = "/colombia"
   }
 
   test {
-    service = google_compute_backend_bucket.satellite_image_backend.id
+    service = google_compute_backend_service.satellite-thailand-fantasy.id
     host    = "example.com"
     path    = "/thailand"
   }
@@ -58,6 +53,8 @@ resource "google_compute_backend_service" "satellite-thailand-fantasy" {
   backend {
     group = google_compute_region_instance_group_manager.satellite-thailand-mig.instance_group
   }
+
+  depends_on = [google_compute_region_instance_group_manager.satellite-thailand-mig]
 
   lifecycle {
     create_before_destroy = true
@@ -78,6 +75,8 @@ resource "google_compute_backend_service" "satellite-colombia-fantasy" {
     group = google_compute_region_instance_group_manager.satellite-colombia-mig.instance_group
   }
 
+  depends_on = [google_compute_region_instance_group_manager.satellite-colombia-mig]
+
   lifecycle {
     create_before_destroy = true
   }
@@ -86,8 +85,8 @@ resource "google_compute_backend_service" "satellite-colombia-fantasy" {
 resource "google_compute_http_health_check" "satellite-hc" {
   name               = "health-check"
   request_path       = "/"
-  check_interval_sec = 20
-  timeout_sec        = 5
+  check_interval_sec = 60
+  timeout_sec        = 10
 }
 
 

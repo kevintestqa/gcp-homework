@@ -45,6 +45,7 @@ cat > /var/www/html/index.html <<EOF
 </html>
 EOF
 
+cp /var/www/html/index.html /var/www/html/colombia
 systemctl enable --now apache2
 EOT
 }
@@ -97,6 +98,7 @@ cat > /var/www/html/index.html <<EOF
 </html>
 EOF
 
+cp /var/www/html/index.html /var/www/html/thailand
 systemctl enable --now apache2
 EOT
 }

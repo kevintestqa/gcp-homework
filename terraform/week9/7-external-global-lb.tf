@@ -1,6 +1,7 @@
 //For external LBs the following are required:  Use resource google_compute_url_map, google_compute_target_http_proxy, and google_compute_global_forwarding_rule for the frontend
 //Use resource google_compute_backend_service for the backend. https://www.reddit.com/r/Terraform/comments/oe06w1/gcp_load_balancer_backend_service/ and https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_url_map#argument-reference
 
+//Directs traffic based on the host_rule and path_matcher blocks
 resource "google_compute_url_map" "satellite_urlmap" {
   name        = "satellite-ur-lmap"
   description = "Resource to route reuests to specified backend services"
@@ -41,11 +42,12 @@ resource "google_compute_url_map" "satellite_urlmap" {
   }
 }
 
+//Tells load balancer WHERE to send traffic after the URL Map (traffic controller) chooses a backend
 resource "google_compute_backend_service" "satellite-thailand-fantasy" {
   name                  = "thailand"
   port_name             = "http"
   protocol              = "HTTP"
-  timeout_sec           = 60
+  timeout_sec           = 600
   load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellite-hc.id]
@@ -61,11 +63,13 @@ resource "google_compute_backend_service" "satellite-thailand-fantasy" {
   }
 }
 
+//Tells load balancer WHERE to send traffic after the URL Map (traffic controller) chooses a backend
+
 resource "google_compute_backend_service" "satellite-colombia-fantasy" {
   name                  = "colombia"
   port_name             = "http"
   protocol              = "HTTP"
-  timeout_sec           = 60
+  timeout_sec           = 600
   load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellite-hc.id]
@@ -90,6 +94,7 @@ resource "google_compute_http_health_check" "satellite-hc" {
 }
 
 
+//Recieves http traffic from the forwarding rule and hands it off to the url map
 //https://docs.cloud.google.com/cdn/docs/setting-up-cdn-with-bucket#terraform_1
 resource "google_compute_target_http_proxy" "satellite_http_proxy" {
   name    = "http-lb-proxy"

@@ -28,23 +28,27 @@ https://docs.cloud.google.com/cdn/docs/overview
 
 
 # Runbook
-* The goal of this runbook is to provision an external application global load balancer
+* The goal of this runbook is to provision an external application global load balancer with a MIG backend
 
   ## Prerequistes
-    1. An instance template
-    2. Health check configuration
+    1. A **global** instance template
+    2. **Global** Health check configuration
+    3. Access to the approrpiate project
+    4. Account must enable the compute engine api
+    5. A Backend bucket
+    6. A Cloud Storage bucket
 
-  ### Steps
+  ### Steps to create an Instance Group
 
   1. Open the Instance groups page
   2. Click **Create Instance Group**
   3. On the Create Instance Group  page enter the following details
       ```
-      Name = 'Satellite-x23'
-      Description = "Production Support Instances"
+      Name = 'orion-x33'
+      Description = "QA Environment Support"
       ```
-  4. Click on Instance template dropdown and select the instance template
-  5. Change the number of instances from 1 to 4
+  4. Click on Instance template dropdown and select a global instance template
+  5. Change the number of instances from 1 to 3
   6. Under the Location section, ensure **Multiple zones** is selected 
   7. Ensure **Region** is us-central1 (Iowa)
   8. Click on the Zones dropdown and ensure all four zones are selected
@@ -61,35 +65,74 @@ https://docs.cloud.google.com/cdn/docs/overview
   14. Edit the Initlization period to
        ```
       Initlization period = 120
-      ``` 
-  15. Ensure that **Repair instance** is selected under Action on failure
-  16. Click on Health check and select a health check implementation
-  17. Click on **Create**
+      ```
+  ### Steps to create a Global External Application Load Balancer
+  15. Ensure that **Repair instance** is selected under **Default Action on failure**
+  16. Click on **Health check** and select a global health check implementation
+  17. Set the Initial delay to 300 seconds
+  18. Ensure **Default Action** is selected under **On failed health check**
+  19. Click on **Create**
+  20. Once the MIG is created, click on the search bar and search for **Load Balancing**
+  21. Click on **Create load balancer**
+  22. Use the following name for the Load Balancer
+   ```
+     Name = qae01-lb
+    ```
+  23. In the **Type of load balancer** section, ensure **Application Load Balancer** (HTP/HTTPS) is selected (it should be selected by default) and click on **Next**
+  24. In the **Public facing or internal** section, ensure **Public facing (external)** is selected (it should be selected by default) and click on **Next**
+  25. In the **Global or single region deployment** section, ensure **Best for global workloads** is selected (it should be selected by default) and click on **Next**
+  26. In the **Load balancer generation** section ensure **Global external Application Load Balancer** is selected(it should be selected by default) and click on **Next**
+  27. Tap on **Configure**
 
-  ## Settings Definitions
-  1. Autoscaling signals - this is what will determine if our instance group will add additional VMs based on the CPU utilization
-  2. Initlization period - time it takes for a VM to become ready for use
-  3. Autohealing - creates a VM instance if it fails a load balanceer health check
+  ### Steps to configure Frontend IP and Backend Buckets
+  28. Under **New Frontend IP and port** enter the following configuration:
+    ```
+     Name = qae01-frontend
+     Description = qa frontend
+     Protocol = HTTP
+     IP Version = IPv4
+     IP address = Ephemeral (Automatic)
+     Port = 80
+    ```
+  29. Click on **Backend Configuration** and select a Backend bucket under **Backend services & backend buckets**
+  30. Click on **OK** to confirm
+  31. Click on **Routing rules** and ensure **Simple host and path rule** is selected
+  32. Under **Host and path rules** ensure the backend selected is the *same* backend bucket selected in step 28
+  33. Click on **Review and finalize** to verify the configuration
+  34. Click on **Create**
 
-## Terraform
-* When creating a VM in terraform, the following arguments are required:
-  * boot_disk - the OS and storage information for our VM
-  * machine_type - the series of machine we wish to provision.  Depending on requirements, one Series may be needed over another
+  ### Steps to configure the MIG to the ALB Backend Service
+  35. On the Load balancing homepage, click on **Create backend service**
+  36. Click **Create** under **Global backend service**
+  37. Fill out the backend service with the following:
+    ```
+     Name = qae01-backend
+     Description = qa backend service
+     Load Balancer type = Global external Application Load Balancer (EXTERNAL_MANAGED)
+     Backend type = Instance group
+     Protocol = HTTP
+     Named port = http
+     Timeout = 60
+     IP address selection policy = Only IPv4
+     Health check = The same health check selected in step 16
+    ```
+  38. Fill out the **Backends** section with the following: 
+    ```
+     IP stack type = IPv4 (single-stack)
+     Instance group = orion-x33
+     Port numbers = 80
+     Balancing mode = Rate
+     Traffic Duration = Default (Short)
+     Maximum RPS = 100
+     Scope = per instance
+     Capacity = 100
+     Backend preference level = None
+    ```
+  39. Disable Cloud CDN
+  40. Do not select a Cloud Armor backend security policy
+  41. Click on **Create**
 
-## Sources
-
-* The below sources were used to build this README and the project it is associated with.  All HA, Autoscaling and Health Check sources were used to gather definitions and use cases.  Terraform sources were used to build the attached project.
-
-| Topic  | Link |
-| ------------- |:-------------:|
-| HA vs Fault Tolerance      | https://www.couchbase.com/blog/high-availability-vs-fault-tolerance|
-| HA vs Fault Tolerance IBM    | https://www.ibm.com/docs/en/powerha-aix/7.2.x?topic=aix-high-availability-versus-fault-tolerance     |
-| HA vs Fault Tolerance Scale computing     | https://www.scalecomputing.com/resources/fault-tolerance-vs-high-availability   |
-|nOps | https://www.nops.io/blog/cloud-scalability|
-|Auto scaling vs elasticity | https://tenmilesquare.com/capabilities/scalability-architecture/auto-scaling-and-elasticity|
-| Instance groups | https://docs.cloud.google.com/compute/docs/instance-groups|
-| 3 Tier architecture| https://www.ibm.com/think/topics/three-tier-architecture|
-|Health Check Overview| https://docs.cloud.google.com/load-balancing/docs/health-check-concepts?utm_source=chatgpt.com|
-|  Terraform Registry Google_compute instance| https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#network_interface.0.access_config.0.nat_ip-1|
-|Terraform Registry google_compute_region_instance_group_manager|https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_instance_group_manager|
-|Terraform Registry google_compute_instance_template| https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance_template|
+  ### Checks
+  42. In the **Backends** tab, verify that there are rows for the bucket selected in step 29 and the newly created backend service
+  43. Click on the backend and verify that the orion-x33 instance group is presented
+  44. Navigate to the Instance groups page and verify the **In Use By** column contains **qae01-backend** is presented

@@ -1,6 +1,6 @@
 # Q & A
 ## Load Balancers
-* Load balancing contributes to Fault Tolerance by protecting against a single point of failure in an environment. Load balancers also maintain high availabilty by ensuring web servers continue to recieve traffic by monitoring the instance health via health checks.  LBs are needed if the goal is to minimize downtime to ensure clients are able to use a company's services.  LBs are different from a reverse proxy in the sense that reverse proxys returns server responses to clients while LBs ensure that the the right client recieves the appropriate response. https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/
+* Load balancing contributes to Fault Tolerance by protecting against a single point of failure in an environment. Load balancers also maintain high availability by ensuring web servers continue to receive traffic by monitoring the instance health via health checks.  LBs are needed if the goal is to minimize downtime to ensure clients are able to use a company's services.  LBs are different from a reverse proxy in the sense that reverse proxies returns server responses to clients while LBs ensure that the the right client receives the appropriate response. https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/
 
 * Load balancers can decrease latency by re-routing traffic from unhealthy VMs to healthy instances.  It is not the only way to decrease latency and should be used with a Cloud CDN.  Anycast IP allows servers to share a single IP address.  This allows clients all over the world to automatically select the closest server, reducing latency. https://www.thousandeyes.com/learning/techtorials/anycast
 
@@ -16,8 +16,7 @@ https://cloud.google.com/security/products/recaptcha?hl=en
 
 ## Cloud CDN
 * Points of Presence or POPs are physical locations that house edge servers responsible for server cached content.  Typically static files needed to load a webpage such as images, HTML, are delivered to clients.  CDNs can also deliver videos to users.
-https://www.keycdn.com/what-is-a-cdn#:~:text=A%20point%20of%20presence%2C%20commonly,make%20up%20the%20entire%20network 
-https://www.cloudflare.com/learning/cdn/what-is-a-cdn/ 
+https://www.keycdn.com/what-is-a-cdn#:~:text=A%20point%20of%20presence%2C%20commonly,make%20up%20the%20entire%20network & https://www.cloudflare.com/learning/cdn/what-is-a-cdn/ 
 
 * External HTTP(S) load balancers, VM instances and Cloud Armor are a handful of services that can be used with Cloud CDN.  Cloud CDN does not protect against cyberattacks.  Its purpose is to deliver cached content to global clients.
 https://docs.cloud.google.com/cdn/docs/overview
@@ -30,10 +29,10 @@ https://docs.cloud.google.com/cdn/docs/overview
 # Runbook
 * The goal of this runbook is to provision an external application global load balancer with a MIG backend
 
-  ## Prerequistes
+  ## Prerequisites
     1. A **global** instance template
     2. **Global** Health check configuration
-    3. Access to the approrpiate project
+    3. Access to the appropriate project
     4. Account must enable the compute engine api
     5. A Backend bucket
     6. A Cloud Storage bucket
@@ -60,11 +59,11 @@ https://docs.cloud.google.com/cdn/docs/overview
       ```
       Signal type = 'CPU Utilization'
       Target CPU Utilization = "70"
-      Predictive autoscaling = Optimizae for availability
+      Predictive autoscaling = Optimize for availability
       ```
-  14. Edit the Initlization period to
+  14. Edit the Initialization period to
        ```
-      Initlization period = 120
+      Initialization period = 120
       ```
   ### Steps to create a Global External Application Load Balancer
   15. Ensure that **Repair instance** is selected under **Default Action on failure**

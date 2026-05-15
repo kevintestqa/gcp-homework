@@ -7,6 +7,7 @@ resource "google_compute_instance_template" "satellite-2x-vm-template" {
   disk {
     source_image = "centos-cloud/centos-stream-10"
     auto_delete = true
+    disk_type = "value"
   }
 
 // Assign the destination for VMs created by the template

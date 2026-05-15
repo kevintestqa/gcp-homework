@@ -7,5 +7,4 @@ resource "google_compute_region_instance_group_manager" "satellite-2x-mig" {
     version {
         instance_template = google_compute_instance_template.satellite-2x-vm-template.self_link
     }
-    
 }

@@ -65,7 +65,8 @@ https://www.huntress.com/cybersecurity-101/topic/ssl-offloading
 https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to-the-backends 
 
 ## Cloud Domain/DNS
-* 
+* Multiple domains can point to the same LB.  An example is amazon.com and aws.amazon.com.  Zones can be thought of as boxes that contain a DNS record(s).  The two types of zones are public and private.  A DNS in a public zone exposes it to the internet.  On the other hand, a private zone a DNS is exposed only to the VPC it belongs in.
+**Source:** https://docs.cloud.google.com/dns/docs/dns-overview#private_zone 
 
 
 # Runbook

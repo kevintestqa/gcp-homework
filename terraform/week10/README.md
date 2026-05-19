@@ -2,15 +2,22 @@
 
 ## Table of Contents
 
-- [Q & A](#q-&-a)
-  - [DNS & SSL/TLS](#dns-&-ssl/tls)
+- [Q & A](#q--a)
+  - [DNS & SSL/TLS](#dns--ssltls)
+    - [TLS Handshake Process](#tls-handshake-process)
   - [Load Balancers](#load-balancers)
-  - [Cloud Domain/DNS](#cloud-domain/dns)
+  - [Cloud Domain/DNS](#cloud-domaindns)
 - [Runbook](#runbook)
+  - [Section 1 - Steps to create an Instance Group](#section-1---steps-to-create-an-instance-group)
+  - [Section 2 - Steps to create a Global External Application Load Balancer](#section-2---steps-to-create-a-global-external-application-load-balancer)
+  - [Section 3 - Steps to configure Frontend IP and Backend Buckets](#section-3---steps-to-configure-frontend-ip-and-backend-buckets)
+  - [Section 4 - Steps to configure the MIG to the ALB Backend Service](#section-4---steps-to-configure-the-mig-to-the-alb-backend-service)
+  - [Section 5 - Checks](#section-5---checks)
 
 
 ## DNS & SSL/TLS
-* Both traceroute and dig are command line networking troubleshooting tools.  While the dig command assists with checking if a domain resolves to the desired IP address, traceroute presents the path(hops) that packets travel to reach the desired destination.  Traceroute pinpoints where possible error may occur on their trip.  Dig is useful for viewing DNS records in detail. **Source:** https://blog.crowncloud.net/post/how-to-test-network-connectivity-in-linux-ping-traceroute-dig-nslookup/.
+* Both traceroute and dig are command line networking troubleshooting tools.  While the dig command assists with checking if a domain resolves to the desired IP address, traceroute presents the path(hops) that packets travel to reach the desired destination.  Traceroute pinpoints where possible error may occur on their trip.  Dig is useful for viewing DNS records in detail. 
+**Source:** https://blog.crowncloud.net/post/how-to-test-network-connectivity-in-linux-ping-traceroute-dig-nslookup/.
 
 <table>
   <tr>
@@ -35,26 +42,30 @@
 | CNAME         | Used to point a domain to another domain's name| 
 **Source:** https://keetmalin.medium.com/common-dns-record-types-explained-fe0a83d20115 & https://youtu.be/HnUDtycXSNE?si=cFBhSM0kctJ2FNDX 
 
-* URL maps are used to determine the destination of a request based on the path (ie. /colombia vs /thailand).  Routing rules use attributes such as headerNames, exactMatch. https://docs.cloud.google.com/load-balancing/docs/url-map#terraform
+ ### TLS Handshake Process
+ 1. CLient's browser sends what is known as a "Hello" message to the desired server.  The message will contain the TLS version the client's browser is using.
+ 2. The server replies to the client's message with its own "Hello" message.  This message contains the server's SSL certificate.
+ 3. The client will verify the legitmacy of the SSL certificate by checking it with the entity (certificate authority) that issued it.
+ 4. Once the legtimacy is confirmed, the client sends what is known as a premaster secret.  It is encrypted by a public key that only the private key held by the server can decrypt.
+ 5. The server will decrypt the premaster secret
+ 6. After the secret is decrypted, the client and server create sessions keys
+ 7. The client and server will send an encrypted "finished" message
+**Source:** https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/ 
+
+* The Certificate authority sells SSL/TLS certificates to businesses and individuals.  Prior to issuing the certificate, the CA checks the domain and owner details to ensure authenticity.  When a client accesses a website, the website presents its certificate which causes the brwoser to validate its authenticity.
+**Source:** https://aws.amazon.com/what-is/ssl-certificate/
 
 ## Load Balancers
-* Cloud Armor is a layer 7 web application firewall.  It protects against HTTP(S) style cyber attacks.  VPC firewall rules only dictate the flow of traffic, whereas Cloud Armor protects your application before the traffic is delivered. https://cloud.google.com/security/products/armor?hl=en 
+* The HTTPS Proxy is the service that offloads SSL.  This is done through the SSL/TLS handshake process.
+**Source:** https://docs.cloud.google.com/load-balancing/docs/target-proxies 
+https://www.huntress.com/cybersecurity-101/topic/ssl-offloading 
 
-* Rate based rules protect an application from suspicious actions from a single IP address.  It limits the number of requests an IP address can make. https://www.cloudflare.com/learning/bots/what-is-rate-limiting/
-
-* reCAPTCHA is a service that monitors an application or service for possible bot activity.  It can be used to slow or even stop scalpers from using bots.  A reCAPTCHA can work with rate based rules to determine if activity from an IP address is suspicious.
-https://cloud.google.com/security/products/recaptcha?hl=en 
+* A good use case for backend in-flight encryption would be a credit card processor aligning with PCI DSS Requirement 4, which focuses on protecting cardholder data with strong cryptography over open, public networks. While it may not be required for every environment, enabling it makes the audit conversation easier.
+**Source:** https://www.middlebury.edu/sites/default/files/2025-01/PCI-DSS-v4_0_1.pdf?fv=AKHVQBp6 
+https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to-the-backends 
 
 ## Cloud Domain/DNS
-* Points of Presence or POPs are physical locations that house edge servers responsible for serving cached content.  Typically static files needed to load a webpage such as images, HTML, are delivered to clients.  CDNs can also deliver videos to users.
-https://www.keycdn.com/what-is-a-cdn#:~:text=A%20point%20of%20presence%2C%20commonly,make%20up%20the%20entire%20network & https://www.cloudflare.com/learning/cdn/what-is-a-cdn/ 
-
-* External HTTP(S) load balancers, VM instances and Cloud Armor are a handful of services that can be used with Cloud CDN.  Cloud CDN does not protect against cyberattacks.  Its purpose is to deliver cached content to global clients.
-https://docs.cloud.google.com/cdn/docs/overview
-
-* An enterprise should consider using Cloud CDN.  Because the service is global, no matter where in the world clients are accessing an enterprise's application from, they will be able to experience low latency. 
-
-* Time to live or TTL tells a cache the length of time data can be considered as fresh.  When the TTL expires, CDN revalidates its content from the origin server and deliver any updated content to future requests through its edge servers.
+* 
 
 
 # Runbook

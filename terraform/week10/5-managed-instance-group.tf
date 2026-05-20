@@ -52,7 +52,7 @@ resource "google_compute_region_instance_group_manager" "satellitex23-alexandria
     instance_template = google_compute_instance_template.satellitex23-vm-alexandria-template.self_link
   }
   named_port {
-    name = "http"
+    name = var.http_port_name
     port = 80
   }
 

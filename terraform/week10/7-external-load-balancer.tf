@@ -2,7 +2,6 @@ locals {
   colombia_Paths = ["/colombia", "/colombia/*"]
   thailand_Paths = ["/thailand", "/thailand/*"]
   alexandria_Paths = ["/alexandria", "/alexandria/*"]
-  http_port_name = "http"
   check_interval_sec_default = 60
   timeout_sec_default = 10
 }
@@ -62,7 +61,7 @@ resource "google_compute_url_map" "satellitex23_urlmap" {
 //Tells load balancer WHERE to send traffic after the URL Map (traffic controller) chooses a backend
 resource "google_compute_backend_service" "satellitex23-thailand-fantasy" {
   name                  = "thailand"
-  port_name             = local.http_port_name
+  port_name             = var.http_port_name
   protocol              = "HTTP"
   timeout_sec           = 600
   load_balancing_scheme = "EXTERNAL_MANAGED"
@@ -84,7 +83,7 @@ resource "google_compute_backend_service" "satellitex23-thailand-fantasy" {
 
 resource "google_compute_backend_service" "satellitex23-colombia-fantasy" {
   name                  = "colombia"
-  port_name             = local.http_port_name
+  port_name             = var.http_port_name
   protocol              = "HTTP"
   timeout_sec           = 600
   load_balancing_scheme = "EXTERNAL_MANAGED"
@@ -105,7 +104,7 @@ resource "google_compute_backend_service" "satellitex23-colombia-fantasy" {
 
 resource "google_compute_backend_service" "satellitex23-alexandria-fantasy" {
   name                  = "alexandria"
-  port_name             = local.http_port_name
+  port_name             = var.http_port_name
   protocol              = "HTTP"
   timeout_sec           = 600
   load_balancing_scheme = "EXTERNAL_MANAGED"

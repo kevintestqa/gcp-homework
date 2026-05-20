@@ -12,3 +12,7 @@ variable "allow-ingress-http" {
   description = "Target tags for allowing ingress http traffic"
   default     = "satellite-servers-ingress-http"
 }
+
+variable "http_port_name" {
+  default = "http"
+}

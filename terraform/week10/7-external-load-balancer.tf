@@ -106,7 +106,7 @@ resource "google_compute_backend_service" "satellitex23-alexandria-fantasy" {
   name                  = "alexandria"
   port_name             = var.http_port_name
   protocol              = "HTTP"
-  timeout_sec           = 600
+  timeout_sec           = 1000
   load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellitex23-hc.id]
@@ -133,16 +133,29 @@ resource "google_compute_http_health_check" "satellitex23-hc" {
 
 //Recieves http traffic from the forwarding rule and hands it off to the url map
 //https://docs.cloud.google.com/cdn/docs/setting-up-cdn-with-bucket#terraform_1
-resource "google_compute_target_http_proxy" "satellite_http_proxy" {
+resource "google_compute_target_http_proxy" "satellitex23_http_proxy" {
   name    = "http-lb-proxy"
   url_map = google_compute_url_map.satellitex23_urlmap.id
 }
 
-# forwarding rule
+resource "google_compute_target_https_proxy" "satellitex23_https_proxy" {
+  name = "https-lb-proxy"
+  url_map = google_compute_url_map.satellitex23_urlmap.id
+}
+
+# forwarding rule. Located under "Frontends"
 resource "google_compute_global_forwarding_rule" "default" {
   name                  = "http-lb-forwarding-rule"
   ip_protocol           = "TCP"
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
-  target                = google_compute_target_http_proxy.satellite_http_proxy.id
+  target                = google_compute_target_http_proxy.satellitex23_http_proxy.id
+}
+
+resource "google_compute_global_forwarding_rule" "forward_https_traffic" {
+  name = "https-lb-forwarding-rule"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  port_range            = "443"
+  target                = google_compute_target_https_proxy.satellitex23_https_proxy.id
 }

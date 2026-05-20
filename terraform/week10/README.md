@@ -7,30 +7,22 @@
     - [TLS Handshake Process](#tls-handshake-process)
   - [Load Balancers](#load-balancers)
   - [Cloud Domain/DNS](#cloud-domaindns)
-- [Runbook](#runbook)
-  - [Section 1 - Steps to create an Instance Group](#section-1---steps-to-create-an-instance-group)
-  - [Section 2 - Steps to create a Global External Application Load Balancer](#section-2---steps-to-create-a-global-external-application-load-balancer)
-  - [Section 3 - Steps to configure Frontend IP and Backend Buckets](#section-3---steps-to-configure-frontend-ip-and-backend-buckets)
-  - [Section 4 - Steps to configure the MIG to the ALB Backend Service](#section-4---steps-to-configure-the-mig-to-the-alb-backend-service)
-  - [Section 5 - Checks](#section-5---checks)
+- [Jira Ticket](#jira-ticket)
+  - [Section 1 - www.jira.com/GCP-1234](#section-1---wwwjiraccomgcp-1234)
+  - [Troubleshooting Process](#troubleshooting-process)
+  - [Root Cause](#root-cause)
 
 
 ## DNS & SSL/TLS
-* Both traceroute and dig are command line networking troubleshooting tools.  While the dig command assists with checking if a domain resolves to the desired IP address, traceroute presents the path(hops) that packets travel to reach the desired destination.  Traceroute pinpoints where possible error may occur on their trip.  Dig is useful for viewing DNS records in detail. 
+
+* Both traceroute and dig are command line networking troubleshooting tools.  While the dig command assists with checking if a domain resolves to the desired IP address, traceroute presents the path(hops) that packets travel to reach the desired destination.  Traceroute pinpoints where possible error may occur on their trip.  Dig is useful for viewing DNS records in detail.
+
 **Source:** https://blog.crowncloud.net/post/how-to-test-network-connectivity-in-linux-ping-traceroute-dig-nslookup/.
 
-<table>
-  <tr>
-    <td>
-      <img src="Assets/DigOutput.png" alt="DigOutput" width="400">
-      <br><em>Example of Dig command output.</em>
-    </td>
-    <td>
-      <img src="Assets/TracerrouteOutput.png" alt="TracerouteOutput" width="400">
-      <br><em>Example of Traceroute command output.</em>
-    </td>
-  </tr>
-</table>
+| | |
+|---|---|
+| ![Dig command output](Assets/DigOutput.png) | ![Traceroute command output](Assets/TracerrouteOutput.png) |
+| *Example of Dig command output.* | *Example of Traceroute command output.* |
 
 * The most common DNS record types are A, AAAA, MX, and CNAME.
 
@@ -39,141 +31,110 @@
 | A             | Resolves DNS name to its IPv4 address|
 | AAAA          | Resolves DNS name to its IPv6 address|
 | MX            | Used by email applications to identify authorized email servers|
-| CNAME         | Used to point a domain to another domain's name| 
-**Source:** https://keetmalin.medium.com/common-dns-record-types-explained-fe0a83d20115 & https://youtu.be/HnUDtycXSNE?si=cFBhSM0kctJ2FNDX 
+| CNAME         | Used to point a domain to another domain's name|
 
- ### TLS Handshake Process
- 1. CLient's browser sends what is known as a "Hello" message to the desired server.  The message will contain the TLS version the client's browser is using.
- 2. The server replies to the client's message with its own "Hello" message.  This message contains the server's SSL certificate.
- 3. The client will verify the legitmacy of the SSL certificate by checking it with the entity (certificate authority) that issued it.
- 4. Once the legtimacy is confirmed, the client sends what is known as a premaster secret.  It is encrypted by a public key that only the private key held by the server can decrypt.
- 5. The server will decrypt the premaster secret
- 6. After the secret is decrypted, the client and server create sessions keys
- 7. The client and server will send an encrypted "finished" message
-**Source:** https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/ 
+**Source:** https://keetmalin.medium.com/common-dns-record-types-explained-fe0a83d20115 & https://youtu.be/HnUDtycXSNE?si=cFBhSM0kctJ2FNDX
 
-* The Certificate authority sells SSL/TLS certificates to businesses and individuals.  Prior to issuing the certificate, the CA checks the domain and owner details to ensure authenticity.  When a client accesses a website, the website presents its certificate which causes the brwoser to validate its authenticity.
+### TLS Handshake Process
+
+1. Client's browser sends what is known as a "Hello" message to the desired server.  The message will contain the TLS version the client's browser is using.
+2. The server replies to the client's message with its own "Hello" message.  This message contains the server's SSL certificate.
+3. The client will verify the legitimacy of the SSL certificate by checking it with the entity (certificate authority) that issued it.
+4. Once the legitimacy is confirmed, the client sends what is known as a premaster secret.  It is encrypted by a public key that only the private key held by the server can decrypt.
+5. The server will decrypt the premaster secret
+6. After the secret is decrypted, the client and server create sessions keys
+7. The client and server will send an encrypted "finished" message
+
+**Source:** https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/
+
+* The Certificate authority sells SSL/TLS certificates to businesses and individuals.  Prior to issuing the certificate, the CA checks the domain and owner details to ensure authenticity.  When a client accesses a website, the website presents its certificate which causes the browser to validate its authenticity.
+
 **Source:** https://aws.amazon.com/what-is/ssl-certificate/
 
 ## Load Balancers
+
 * The HTTPS Proxy is the service that offloads SSL.  This is done through the SSL/TLS handshake process.
-**Source:** https://docs.cloud.google.com/load-balancing/docs/target-proxies 
-https://www.huntress.com/cybersecurity-101/topic/ssl-offloading 
+
+**Source:** https://docs.cloud.google.com/load-balancing/docs/target-proxies
+https://www.huntress.com/cybersecurity-101/topic/ssl-offloading
 
 * A good use case for backend in-flight encryption would be a credit card processor aligning with PCI DSS Requirement 4, which focuses on protecting cardholder data with strong cryptography over open, public networks. While it may not be required for every environment, enabling it makes the audit conversation easier.
-**Source:** https://www.middlebury.edu/sites/default/files/2025-01/PCI-DSS-v4_0_1.pdf?fv=AKHVQBp6 
-https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to-the-backends 
+
+**Source:** https://www.middlebury.edu/sites/default/files/2025-01/PCI-DSS-v4_0_1.pdf?fv=AKHVQBp6
+https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to-the-backends
 
 ## Cloud Domain/DNS
+
 * Multiple domains can point to the same LB.  An example is amazon.com and aws.amazon.com.  Zones can be thought of as boxes that contain a DNS record(s).  The two types of zones are public and private.  A DNS in a public zone exposes it to the internet.  On the other hand, a private zone a DNS is exposed only to the VPC it belongs in.
-**Source:** https://docs.cloud.google.com/dns/docs/dns-overview#private_zone 
+
+**Source:** https://docs.cloud.google.com/dns/docs/dns-overview#private_zone
 
 
-# Runbook
-* The goal of this runbook is to provide engineers strategies to troubleshoot a VNM
+# Jira Ticket
 
-  ### Section 1 - Steps to create an Instance Group
-  * The goal of this section is to configure an Instance group that will be used as our backend for the external application global load balancer
+### Section 1 - www.jira.com/GCP-1234
 
-  1. Open the Instance groups page
-  2. Click **Create Instance Group**
-  3. On the Create Instance Group  page enter the following details
-      ```
-      Name = 'orion-x33'
-      Description = "QA Environment Support"
-      ```
-  4. Click on Instance template dropdown and select a global instance template
-  5. Change the number of instances from 1 to 3
-  6. Under the Location section, ensure **Multiple zones** is selected 
-  7. Ensure **Region** is us-central1 (Iowa)
-  8. Click on the Zones dropdown and ensure all four zones are selected
-  9. Leave the Target distribution shape as **Balanced**
-  10. Click on **Configure Autoscaling**
-  11. Ensure **On: add and remove instances to the group** is selected
-  12. Set the minimum number of instances to 2 and the maximum number of instances to 8
-  13. Edit the Autoscaling signal to the following
-      ```
-      Signal type = 'CPU Utilization'
-      Target CPU Utilization = "70"
-      Predictive autoscaling = Optimize for availability
-      ```
-  14. Edit the Initialization period to
-       ```
-      Initialization period = 120
-      ```
-  ### Section 2 - Steps to create a Global External Application Load Balancer
-  * The goal of this section is to create a Global External Application Load Balancer
+* **Title** - VM Instance cannot connect to the internet
+* **Description** - VM could not be accessed from external clients.
+* **Expected behavior** VM should be able to be accessed from external clients
+* **Current behaviors**:
+  1. VM is marked as Stopped
+  2. Application is unreachable
+  3. SSH is disabled
 
-  1. Ensure that **Repair instance** is selected under **Default Action on failure**
-  2. Click on **Health check** and select a global health check implementation
-  3. Set the Initial delay to 300 seconds
-  4. Ensure **Default Action** is selected under **On failed health check**
-  5. Click on **Create**
-  6. Once the MIG is created, click on the search bar and search for **Load Balancing**
-  7. Click on **Create load balancer**
-  8. Use the following name for the Load Balancer
-   ```
-     Name = qae01-lb
-    ```
-  9. In the **Type of load balancer** section, ensure **Application Load Balancer** (HTTP/HTTPS) is selected (it should be selected by default) and click on **Next**
-  10. In the **Public facing or internal** section, ensure **Public facing (external)** is selected (it should be selected by default) and click on **Next**
-  11. In the **Global or single region deployment** section, ensure **Best for global workloads** is selected (it should be selected by default) and click on **Next**
-  12. In the **Load balancer generation** section ensure **Global external Application Load Balancer** is selected (it should be selected by default) and click on **Next**
-  13. Tap on **Configure**
+  ![Jira ticket GCP-1234](Assets/GCP-Jira-1234.png)
 
-  ### Section 3 - Steps to configure Frontend IP and Backend Buckets
-  * The goal of this section is to configure the Frontend IP and Backend Buckets to the Application Load Balancer
+### Troubleshooting Process
 
-  1. Under **New Frontend IP and port** enter the following configuration:
-    ```
-     Name = qae01-frontend
-     Description = qa frontend
-     Protocol = HTTP
-     IP Version = IPv4
-     IP address = Ephemeral (Automatic)
-     Port = 80
-    ```
-  2. Click on **Backend Configuration** and select a Backend bucket under **Backend services & backend buckets**
-  3. Click on **OK** to confirm
-  4. Click on **Routing rules** and ensure **Simple host and path rule** is selected
-  5. Under **Host and path rules** ensure the backend selected is the *same* backend bucket selected in step 3.2
-  6. Click on **Review and finalize** to verify the configuration
-  7. Click on **Create**
+1. Open the VM Details Page and noticed the instance is marked as "Stopped"
+2. Checked subnet details
+3. Checked Firewall rules and noticed the Deny All rule had a Priority of 0
 
-  ### Section 4 - Steps to configure the MIG to the ALB Backend Service
-  * The goal is to integrate the created MIG with the ALB's backend service
+   ![Firewall rule with Priority 0](Assets/firewall-rule.png)
 
-  1. On the Load balancing homepage, click on **Create backend service**
-  2. Click **Create** under **Global backend service**
-  3. Fill out the backend service with the following:
-    ```
-     Name = qae01-backend
-     Description = qa backend service
-     Load Balancer type = Global external Application Load Balancer (EXTERNAL_MANAGED)
-     Backend type = Instance group
-     Protocol = HTTP
-     Named port = http
-     Timeout = 60
-     IP address selection policy = Only IPv4
-     Health check = The same health check selected in Section 2.2
-    ```
-  4. Fill out the **Backends** section with the following: 
-    ```
-     IP stack type = IPv4 (single-stack)
-     Instance group = orion-x33
-     Port numbers = 80
-     Balancing mode = Rate
-     Traffic Duration = Default (Short)
-     Maximum RPS = 100
-     Scope = per instance
-     Capacity = 100
-     Backend preference level = None
-    ```
-  5. Disable Cloud CDN
-  6. Do not select a Cloud Armor backend security policy
-  7. Click on **Create**
+   * Changed the Deny All rule's Priority to 1200
+     * Restarted VM and ensured it was in the "running" status
+   * Checked SSH access and was presented with the Received Connection via Cloud Identity-Aware Proxy Failed error
 
-  ### Section 5 - Checks
-  1. In the **Backends** tab, verify that there are rows for the bucket selected in section 3.2 and the newly created backend service
-  2. Click on the backend and verify that the orion-x33 instance group is presented
-  3. Navigate to the Instance groups page and verify the **In Use By** column contains **qae01-backend** is presented
+     ![SSH in browser error](Assets/SSH-in-browser.png)
+
+     * Compared SSH Firewall rules and noticed the source range does not match the range the error suggested
+
+       ![Identity-Aware Proxy source range mismatch](Assets/Aware-Proxy-Failed.png)
+
+       * Changed IPv4 source range to what range the error mentioned
+
+       ![IPv4 range change](Assets/iPv4-ranges.png)
+
+4. Opened SSH window for the instance and pinged Google. Although packets were transmitted, 0 were received by the client
+
+   ![SSH packet transmitted](Assets/packet-received.png)
+
+5. Opened VM details and saw that the firewalls were not checked
+
+   ![Firewalls selection](Assets/Firewalls.png)
+
+   * Selected Allow HTTP Traffic and saved changes
+
+6. Checked details of the VM's startup script
+   * Opened the Network Interfaces for the VM and noticed that external IPv4 address was set to "None". As a result, changed the external address to "Ephemeral"
+
+7. Attempted to access VM through client browser
+8. Navigated back to VM's Network Interface details and noticed the lack of a route to the internet gateway
+
+   ![Network Interface details](Assets/Network-config-analysis.png)
+
+9. Opened the Routes page and clicked on Route Management to create a route and associate it to the VM's VPC
+
+   ![Routes configuration](Assets/Create-route.png)
+
+10. Returned to the VM's Network Interface details to ensure the route was successfully created
+
+    ![Routes configuration](Assets/Routes-config.png)
+
+11. Re-opened the SSH browser and pinged Google.com
+12. Accessed the VM via a web browser
+
+### Root Cause
+
+* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.

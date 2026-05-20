@@ -1,6 +1,6 @@
 resource "google_compute_firewall" "satellite-allow-http" {
   name    = "satellite-allow-http"
-  network = google_compute_network.satellite-vpc.name
+  network = google_compute_network.satellitex23-vpc.name
 
   allow {
     protocol = "tcp"
@@ -10,7 +10,7 @@ resource "google_compute_firewall" "satellite-allow-http" {
   source_ranges = ["0.0.0.0/0"]
 
   depends_on = [
-    google_compute_network.satellite-vpc
+    google_compute_network.satellitex23-vpc
   ]
 
   target_tags = [var.allow-ingress-http]

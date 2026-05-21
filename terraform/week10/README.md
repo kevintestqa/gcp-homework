@@ -12,7 +12,6 @@
   - [Troubleshooting Process](#troubleshooting-process)
   - [Root Cause](#root-cause)
 
-
 ## DNS & SSL/TLS
 
 * Both traceroute and dig are command line networking troubleshooting tools.  While the dig command assists with checking if a domain resolves to the desired IP address, traceroute presents the path(hops) that packets travel to reach the desired destination.  Traceroute pinpoints where possible error may occur on their trip.  Dig is useful for viewing DNS records in detail.
@@ -69,22 +68,20 @@ https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to
 
 **Source:** https://docs.cloud.google.com/dns/docs/dns-overview#private_zone
 
-
 # Jira Ticket
 
-### Section 1 - www.jira.com/GCP-1234
+### Section 1 - Link to Jira Ticket - www.jira.com/GCP-1234
 
 * **Title** - VM Instance cannot connect to the internet
 * **Description** - VM could not be accessed from external clients.
 * **Expected behavior** VM should be able to be accessed from external clients
 * **Current behaviors**:
-  1. VM is marked as Stopped
-  2. Application is unreachable
-  3. SSH is disabled
+  1. VM is initially marked as Stopped
+  2. Application is unreachable via SSH or browser
 
   ![Jira ticket GCP-1234](Assets/GCP-Jira-1234.png)
 
-### Troubleshooting Process
+### Troubleshooting DocumProcess
 
 1. Open the VM Details Page and noticed the instance is marked as "Stopped"
 2. Checked subnet details
@@ -137,4 +134,4 @@ https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to
 
 ### Root Cause
 
-* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.
+* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.  By creating a route, the VM was able to be accessed by an external browser and SSH functionality was restored.

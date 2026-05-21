@@ -90,7 +90,7 @@ resource "google_compute_backend_service" "satellitex23-colombia-fantasy" {
 
   health_checks = [google_compute_http_health_check.satellitex23-hc.id]
 
-  //TODO: Find out more. The backend needs to be attached https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_backend_service?utm_source=chatgpt.com#nested_backend
+  // The backend needs to be attached https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_backend_service?utm_source=chatgpt.com#nested_backend
   backend {
     group = google_compute_region_instance_group_manager.satellitex23-colombia-mig.instance_group
   }
@@ -138,11 +138,6 @@ resource "google_compute_target_http_proxy" "satellitex23_http_proxy" {
   url_map = google_compute_url_map.satellitex23_urlmap.id
 }
 
-resource "google_compute_target_https_proxy" "satellitex23_https_proxy" {
-  name = "https-lb-proxy"
-  url_map = google_compute_url_map.satellitex23_urlmap.id
-}
-
 # forwarding rule. Located under "Frontends"
 resource "google_compute_global_forwarding_rule" "default" {
   name                  = "http-lb-forwarding-rule"
@@ -150,12 +145,4 @@ resource "google_compute_global_forwarding_rule" "default" {
   load_balancing_scheme = "EXTERNAL_MANAGED"
   port_range            = "80"
   target                = google_compute_target_http_proxy.satellitex23_http_proxy.id
-}
-
-resource "google_compute_global_forwarding_rule" "forward_https_traffic" {
-  name = "https-lb-forwarding-rule"
-  ip_protocol           = "TCP"
-  load_balancing_scheme = "EXTERNAL_MANAGED"
-  port_range            = "443"
-  target                = google_compute_target_https_proxy.satellitex23_https_proxy.id
 }

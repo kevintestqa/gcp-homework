@@ -140,7 +140,7 @@ cat > /var/www/html/index.html <<EOF
   <h1>VM Metadata</h1>
   <h2>Instance Name: $NAME</h2>
   <h2>Internal IP: $IP</h2>
-  <h2>Ven aqui</h2>
+  <h2>Honey I am home!</h2>
   <figure>
     <img src="https://storage.googleapis.com/${google_storage_bucket.satellitex23-bucket.name}/queenbrahne.jpg" alt="You come home to this after getting your comptia cert!" style="max-width:600px; width:100%; display:block; margin:1rem 0;">
     <figcaption> Lay in bed with her and think about your life </figcaption>

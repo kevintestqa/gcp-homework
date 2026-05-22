@@ -9,5 +9,5 @@ terraform {
 
 provider "google" {
   project = "theowaf-class7-5-kevinwillocks" //Ensure the correct project is entered here!!!
-  region  = "us-west1"
+  region  = var.region
 }

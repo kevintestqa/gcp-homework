@@ -4,7 +4,7 @@ resource "google_compute_instance_template" "satellitex23-vm-colombia-template" 
   // Specfiying the type of VM instance the template will create
   machine_type = var.machine_type
   disk {
-    source_image = "debian-cloud/debian-11"
+    source_image = var.source_image
     auto_delete  = true
   }
 
@@ -56,7 +56,7 @@ resource "google_compute_instance_template" "satellitex23-vm-thailand-template" 
   // Specfiying the type of VM instance the template will create
   machine_type = var.machine_type
   disk {
-    source_image = "debian-cloud/debian-11"
+    source_image = var.source_image
     auto_delete  = true
   }
 
@@ -108,7 +108,7 @@ resource "google_compute_instance_template" "satellitex23-vm-alexandria-template
   // Specfiying the type of VM instance the template will create
   machine_type = var.machine_type
   disk {
-    source_image = "debian-cloud/debian-11"
+    source_image = var.source_image
     auto_delete  = true
   }
 

@@ -8,7 +8,7 @@ resource "google_compute_network" "satellitex23-vpc" {
 resource "google_compute_subnetwork" "satellite-sub" {
   name                     = "satellite-sub"
   ip_cidr_range            = "10.30.0.0/18"
-  region                   = "us-west1"
+  region                   = var.region
   network                  = google_compute_network.satellitex23-vpc.id
   private_ip_google_access = false
 

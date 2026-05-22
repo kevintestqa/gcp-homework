@@ -38,7 +38,6 @@ resource "google_compute_url_map" "satellitex23_urlmap" {
     }
   }
 
-  //TODO: TRY TO EDIT THIS
   test {
     service = google_compute_backend_service.satellitex23-colombia-fantasy.id
     host    = "example.com"
@@ -85,7 +84,7 @@ resource "google_compute_backend_service" "satellitex23-colombia-fantasy" {
   name                  = "colombia"
   port_name             = var.http_port_name
   protocol              = "HTTP"
-  timeout_sec           = 600
+  timeout_sec           = var.timeout_sec
   load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellitex23-hc.id]
@@ -106,7 +105,7 @@ resource "google_compute_backend_service" "satellitex23-alexandria-fantasy" {
   name                  = "alexandria"
   port_name             = var.http_port_name
   protocol              = "HTTP"
-  timeout_sec           = 1000
+  timeout_sec           = var.timeout_sec
   load_balancing_scheme = "EXTERNAL_MANAGED"
 
   health_checks = [google_compute_http_health_check.satellitex23-hc.id]

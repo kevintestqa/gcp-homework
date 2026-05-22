@@ -134,4 +134,4 @@ https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to
 
 ### Root Cause
 
-* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.  By creating a route, the VM was able to be accessed by an external browser and SSH functionality was restored.  Suggestionsfor future deployments: have QA team test and sign off.
+* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.  By creating a route, the VM was able to be accessed by an external browser and SSH functionality was restored.  Suggestion for future deployments: have QA team test and sign off.

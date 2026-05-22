@@ -81,7 +81,7 @@ https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to
 
   ![Jira ticket GCP-1234](Assets/GCP-Jira-1234.png)
 
-### Troubleshooting DocumProcess
+### Troubleshooting Process
 
 1. Open the VM Details Page and noticed the instance is marked as "Stopped"
 2. Checked subnet details
@@ -134,4 +134,4 @@ https://docs.cloud.google.com/load-balancing/docs/ssl-certificates/encryption-to
 
 ### Root Cause
 
-* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.  By creating a route, the VM was able to be accessed by an external browser and SSH functionality was restored.
+* VM did not have an external IP address.  In addition, VM did not have a route to the public internet.  By creating a route, the VM was able to be accessed by an external browser and SSH functionality was restored.  Suggestionsfor future deployments: have QA team test and sign off.

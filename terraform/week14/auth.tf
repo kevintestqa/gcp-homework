@@ -1,14 +1,13 @@
 terraform {
-  required_version = "value"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 7.31"
+      version = "~> 7.37"
     }
   }
 }
 
 provider "google" {
   project = "theowaf-class7-5-kevinwillocks" //Ensure the correct project is entered here!!!
-  region  = "us-west1"
+  region  = var.midwest_region
 }
